@@ -3,11 +3,14 @@ import Button from '../component/Button';
 import CustomInput from '../component/CustomInput';
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import Swal from 'sweetalert2'
+import { useHistory } from "react-router-dom";
 
 // import Header from "./Header";
 
 const Register = () => 
 {
+    const history = useHistory();
     const [vFirstname_er,setFirstname_er]   = useState('');
     const [vLastname_er,setLastname_er]     = useState('');
     const [vEmail_er,setEmail_er]           = useState('');
@@ -15,6 +18,7 @@ const Register = () =>
 
     function register() 
     {
+    
         var vFirstname  = document.getElementById('Firstname').value;
         var vLastname   = document.getElementById('vLastname').value;
         var vEmail      = document.getElementById('vEmail').value;
@@ -64,22 +68,7 @@ const Register = () =>
        
         if (error==false)
         {
-            // const form_data = new FormData();
-            // form_data.append('vFirstname', vFirstname);
-            // form_data.append('vLastname', vLastname);
-            // form_data.append('vEmail', vEmail);
-            // form_data.append('vPassword', vPassword);
-
-            // console.log("save data 00",form_data);
-
-            // let headers = new Headers();
-
-            // headers.append('Content-Type', 'application/json');
-            // headers.append('Accept', 'application/json');
-            // // headers.append('Access-Control-Allow-Origin', 'http://localhost:5000');
-            // headers.append('Access-Control-Allow-Credentials', 'true');
-            // headers.append('GET', 'POST', 'OPTIONS');
-
+        
             axios({
                 method: "POST",
                 url: url,
@@ -87,35 +76,20 @@ const Register = () =>
                 // headers:headers
               })
             .then(res => {
-                alert('ok');
-                // if (res.data.Status == '0') {
-                //     setGif(false);
-                //     toast.success(res.data.message, {
-                //         position: "top-center",
-                //         autoClose: 5000,
-                //         hideProgressBar: false,
-                //         closeOnClick: true,
-                //         pauseOnHover: true,
-                //         draggable: true,
-                //         progress: undefined,
-                //     });
-
-                //     setTimeout(function () {
-                //         history.push("/admin/banner");
-                //     }, 2000);
-                // }
-                // else {
-                //     setGif(false);
-                //     toast.error(res.data.message, {
-                //         position: "top-center",
-                //         autoClose: 5000,
-                //         hideProgressBar: false,
-                //         closeOnClick: true,
-                //         pauseOnHover: true,
-                //         draggable: true,
-                //         progress: undefined,
-                //     });
-                // }
+                if (res.status == 200) 
+                {
+                    Swal.fire(
+                        'Good job!',
+                        'Registration Successfully',
+                        'success'
+                    )
+                    
+                    history.push("/");
+                  
+                }
+                else {
+                    history.push("/register");
+                }
             })
             .catch(error => {
             })
