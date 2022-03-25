@@ -1,99 +1,64 @@
 import React, { useState ,useEffect } from "react";
-import Button from '../component/Button';
-import CustomInput from '../component/CustomInput';
 import { Link } from "react-router-dom";
-import { uid} from 'rand-token';
 import { useHistory } from "react-router-dom";
-
 import axios from 'axios';
-
-// import Header from "./Header";
+import Header from "./Header";
 
 const Listing = () => 
 {
-    const history = useHistory();
-    // var token = uid(12);
+    const history               = useHistory();
+    const [Book,setBook]        = useState([]);
 
-    // console.log("jayesh ",token);
-
-    const [Book,setBook]       = useState([]);
-
-
-    const bookdata_get = async () => {
-      
-        var url = 'http://localhost:5000/api/v1/employee/all_book';
+    const bookdata_get = async () => 
+    {
+        var url = 'http://localhost:5000/api/v1/register/all_book';
         const bookdata = await axios.get(url);
-        console.log(bookdata.data.rows);
-        if(bookdata.data.rows)
+        if(bookdata.data)
         {
-            setBook(bookdata.data.rows);
+            setBook(bookdata.data);
         }
-    
-      };
-      useEffect(() => {
+    };
+
+    useEffect(() => 
+    {
         bookdata_get();
-      }, []);
+    }, []);
 
-      function delete_data(e)
-      {
+    function delete_data(e)
+    {
         var id = e.target.id;
-
-        var delete_url = `http://localhost:5000/api/v1/employee/delete/${id}`;
+        var delete_url = `http://localhost:5000/api/v1/register/delete/${id}`;
 
         axios({
             method: "DELETE",
             url: delete_url,
             data: {'id': 'id'},
-            // headers:headers
-          })
+            })
         .then(res => 
         {
             console.log(res);
             if (res.status == 200) 
             {
-                // alert();
-               window.location.reload(false);
-
-              
+                bookdata_get()
             }
             else {
-                // history.push("/register");
             }
         })
         .catch(error => {
         })
+    }
 
-      }
-
-
-   
     return(
         <>
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <div class="container-fluid">
-            <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link active" href="/dashboard">Dashboard</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/register">Register</a>
-            </li>
-            <li class="nav-item">
-                    <a class="nav-link" href="/dashboard">Book Added</a>
-            </li>
-            
-            </ul>
-        </div>
-        </nav>
-
-        <div className="App">
+        <Header/>
+        <div className="App App1">
             <h2>Book Data Listing</h2>
             
             <div class="table-responsive">          
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>#</th>
+                        <th>Id</th>
                         <th>Book Title</th>
                         <th>Author</th>
                         <th>Price</th>
@@ -110,20 +75,18 @@ const Listing = () =>
                                     <td>{book.book_author}</td>
                                     <td>{book.price}</td>
                                     <td>
-                                        <button id={`${book.id}`} onClick={delete_data} className="btn btn-danger">Delete</button>
-                                        <a href={`/edit/${book.id}`}>
-                                         <button id={`${book.id}`} className="btn btn-primary">Edit</button>
-                                        </a>
-                                       
+                                        <button id={`${book.id}`} onClick={delete_data} className="btn btn-danger">Delete</button>&nbsp;
+                                        <Link to={`/edit/${book.id}`}>
+                                            <button id={`${book.id}`} className="btn btn-primary">Edit</button>
+                                        </Link>
                                     </td>
                                 </tr>
                             })
                             :
                             <tr>
-                                <td>Record Not Found !</td>
+                                <td colspan="5">Record Not Found !</td>
                             </tr>
                         }
-                   
                     </tbody>
                 </table>
             </div>

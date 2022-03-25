@@ -1,35 +1,28 @@
 import React, { useState ,useEffect } from "react";
 import Button from '../component/Button';
-import CustomInput from '../component/CustomInput';
-import { Link } from "react-router-dom";
-import { uid} from 'rand-token';
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import Swal from 'sweetalert2';
 import axios from 'axios';
-
-// import Header from "./Header";
+import Header from "./Header";
 
 const Edit = () => 
 {
-    const history = useHistory();
-    const params = useParams();
-
-    const [Book,setBook] = useState([]);
-
-    const [Title,setTitle]       = useState('');
-    const [Author,setAuthor]     = useState('');
-    const [Price,setPrice]       = useState('');
-
-    const [Title_e,setTitle_e]       = useState('');
-    const [Author_e,setAuthor_e]     = useState('');
-    const [Price_e,setPrice_e]       = useState('');
+    const history                   = useHistory();
+    const params                    = useParams();
+    const [Book,setBook]            = useState([]);
+    const [Title,setTitle]          = useState('');
+    const [Author,setAuthor]        = useState('');
+    const [Price,setPrice]          = useState('');
+    const [Title_e,setTitle_e]      = useState('');
+    const [Author_e,setAuthor_e]    = useState('');
+    const [Price_e,setPrice_e]      = useState('');
 
     const editdata = async () => 
     {
         var id = params.id;
-        var url = `http://localhost:5000/api/v1/employee/edit/${id}`;
+        var url = `http://localhost:5000/api/v1/register/edit/${id}`;
         const bookdata = await axios.get(url);
-        console.log("PPPPPPPPPPP",bookdata);
         if(bookdata.data.rows)
         {
             setTitle_e(bookdata.data.rows[0].book_title);
@@ -37,7 +30,6 @@ const Edit = () =>
             setPrice_e(bookdata.data.rows[0].price);
            
         }
-    
       };
       useEffect(() => {
         editdata();
@@ -80,27 +72,31 @@ const Edit = () =>
             setPrice("Please Enter Book Price");
             error = true;
         }
-
-        var url = `http://localhost:5000/api/v1/employee/edit/${id}`;
        
         if (error==false)
         {
-        
+            var url = `http://localhost:5000/api/v1/register/edit/${id}`;
             axios({
                 method: "PUT",
                 url: url,
                 data: {Title:Title_e,Author:Author_e,Price:Price_e},
-                // headers:headers
               })
             .then(res => {
                 if (res.status == 200) 
                 {
-                    // alert();
+                    Swal.fire(
+                        'Book Update!',
+                        'Book Update Successfully',
+                        'success'
+                    )
                     history.push("/listing");
-                  
                 }
                 else {
-                    // history.push("/register");
+                    Swal.fire(
+                        'Error!',
+                        'Server Error ',
+                        'error'
+                    )
                 }
             })
             .catch(error => {
@@ -108,26 +104,9 @@ const Edit = () =>
         }
     }
     
-    
     return(
         <>
-         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-            <div class="container-fluid">
-                <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/dashboard">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/dashboard">Book Added</a>
-                </li>
-               
-                </ul>
-            </div>
-        </nav>
-
+          <Header />
             <div className="App">
                 <h2>Book Added</h2>
                 <form className="form">

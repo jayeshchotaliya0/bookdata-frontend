@@ -6,11 +6,9 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import { useHistory } from "react-router-dom";
 
-// import Header from "./Header";
-
 const Register = () => 
 {
-    const history = useHistory();
+    const history                           = useHistory();
     const [vFirstname_er,setFirstname_er]   = useState('');
     const [vLastname_er,setLastname_er]     = useState('');
     const [vEmail_er,setEmail_er]           = useState('');
@@ -18,7 +16,6 @@ const Register = () =>
 
     function register() 
     {
-    
         var vFirstname  = document.getElementById('Firstname').value;
         var vLastname   = document.getElementById('vLastname').value;
         var vEmail      = document.getElementById('vEmail').value;
@@ -64,16 +61,14 @@ const Register = () =>
             error = true;
         }
 
-        var url = 'http://localhost:5000/api/v1/employee';
+        var url = 'http://localhost:5000/api/v1/register';
        
         if (error==false)
         {
-        
             axios({
                 method: "POST",
                 url: url,
                 data: {vFirstname:vFirstname,vLastname:vLastname,vEmail:vEmail,vPassword:vPassword},
-                // headers:headers
               })
             .then(res => {
                 if (res.status == 200) 
@@ -83,11 +78,10 @@ const Register = () =>
                         'Registration Successfully',
                         'success'
                     )
-                    
                     history.push("/");
-                  
                 }
-                else {
+                else 
+                {
                     history.push("/register");
                 }
             })
@@ -98,7 +92,6 @@ const Register = () =>
 
     return(
         <>
-        {/* <Header/> */}
             <div className="App">
                 <form className="forms">
                 <CustomInput
@@ -108,7 +101,6 @@ const Register = () =>
                     fullWidth: true
                     }}
                     type="text"
-                    
                 />
                 <span style={{'color' : 'red'}}>{vFirstname_er}</span>
                 <CustomInput
@@ -117,7 +109,6 @@ const Register = () =>
                     formControlProps={{
                     fullWidth: true
                     }}
-                    
                     type="text"
                 />
                 <span style={{'color' : 'red'}}>{vLastname_er}</span>
@@ -141,14 +132,8 @@ const Register = () =>
                 />
                 <span style={{'color' : 'red'}}>{vPassword_er}</span>
 
-                <Button type="button" color="primary" onClick={register} className="form__custom-button">
-                    Register
-                </Button>
-                <Link to='/'>
-                    <a>
-                        Login
-                    </a>
-                </Link>
+                <Button type="button" color="primary" onClick={register} className="form__custom-button"> Register </Button>
+                <Link to='/'><a> Login </a> </Link>
                 </form>
             </div>
         </>

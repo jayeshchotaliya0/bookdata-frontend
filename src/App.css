@@ -4,12 +4,16 @@
 }
 
 body {
-  background: #9da79d;
+  background: gainsboro;
 }
 
 .App {
   font-family: sans-serif;
   text-align: center;
+}
+.App1
+{
+  background: white;
 }
 
 .form {

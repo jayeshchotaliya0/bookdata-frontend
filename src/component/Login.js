@@ -2,18 +2,13 @@ import React, { useState, useEffect } from "react";
 import Button from '../component/Button';
 import CustomInput from '../component/CustomInput';
 import { Link } from "react-router-dom";
-import { uid} from 'rand-token';
 import { useHistory } from "react-router-dom";
+import Swal from 'sweetalert2';
 import axios from 'axios';
-
-// import Header from "./Header";
 
 const Login = () => 
 {
-    const history = useHistory();
-
-    // console.log("jayesh ",token);
-
+    const history                           = useHistory();
     const [vEmail_er,setEmail_er]           = useState('');
     const [vPassword_er,setPassword_er]     = useState('');
 
@@ -43,44 +38,38 @@ const Login = () =>
             error = true;
         }
 
-        var url = 'http://localhost:5000/api/v1/employee/login_process';
+        var url = 'http://localhost:5000/api/v1/register/login';
        
         if (error==false)
         {
-        
             axios({
                 method: "POST",
                 url: url,
                 data: {vEmail:vEmail,vPassword:vPassword},
-                // headers:headers
               })
             .then(res => {
-                console.log("login last data 01",res.data.Token);
                 if (res.data.Token) 
                 {
+                    Swal.fire(
+                        'Login!',
+                        'Login Successfully',
+                        'success'
+                    )
                     window.sessionStorage.setItem("Token", res.data.Token);
-
                     history.push("/dashboard");
-                  
                 }
                 else 
                 {
-                    alert('Email And Password incorect Please Try!')
-                    // history.push("/register");
+                    alert('*Incorrect Email Address or Password')
                 }
             })
             .catch(error => {
             })
         }
-
-
     }
    
-
-
     return(
         <>
-        {/* <Header/> */}
             <div className="App">
                 <form className="form">
                 <CustomInput
@@ -89,7 +78,6 @@ const Login = () =>
                     formControlProps={{
                     fullWidth: true
                     }}
-                    
                     type="text"
                 />
                  <span style={{'color' : 'red'}}>{vEmail_er}</span>
@@ -103,18 +91,8 @@ const Login = () =>
                 />
                  <span style={{'color' : 'red'}}>{vPassword_er}</span>
 
-                <Button type="button" onClick={login} color="primary" className="form__custom-button">
-                    Log in
-                </Button>
-                
-                <Link to='/register'>
-                    <a>
-                        Register
-                    </a>
-                </Link>
-                
-
-
+                <Button type="button" onClick={login} color="primary" className="form__custom-button">Log in </Button>
+                <Link to='/register'><a>Register</a></Link>
                 </form>
             </div>
         </>
